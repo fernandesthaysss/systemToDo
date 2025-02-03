@@ -1,40 +1,62 @@
 package com.example.task.controller;
 
+import com.example.task.dto.TaskRequestDTO;
+import com.example.task.dto.TaskResponseDTO;
 import com.example.task.service.TaskService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/tasks")
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1")
 public class TaskController {
+
     private final TaskService taskService;
 
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
-    @GetMapping
-    public String listTasks(Model model) {
-        model.addAttribute("tasks", taskService.getTasks());
-        return "index";
+    @GetMapping("/findtasks")
+    public List<TaskResponseDTO> getAllTasks() {
+        return taskService.getAllTasks();
     }
 
-    @PostMapping("/add")
-    public String addTask(@RequestParam String description) {
-        taskService.addTask(description);
-        return "redirect:/tasks";
+    @GetMapping("/findtasks/{id}")
+    public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long id) {
+        TaskResponseDTO task = taskService.getTaskById(id);
+        return ResponseEntity.ok(task);
     }
 
-    @PostMapping("/complete")
-    public String completeTask(@RequestParam int taskId) {
-        taskService.completeTask(taskId);
-        return "redirect:/tasks";
+    @PostMapping
+    public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody TaskRequestDTO taskRequestDTO) {
+        TaskResponseDTO createdTask = taskService.createTask(taskRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
     }
 
-    @PostMapping("/delete")
-    public String deleteTask(@RequestParam int taskId) {
-        taskService.deleteTask(taskId);
-        return "redirect:/tasks";
+
+    @PostMapping("/complete/{id}")
+    public ResponseEntity<Void> completeTask(@PathVariable Long id) {
+        taskService.markTaskAsCompleted(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        taskService.deleteTask(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long id,
+                                                      @Valid @RequestBody TaskRequestDTO taskRequestDTO) {
+        TaskResponseDTO updatedTask = taskService.updateTask(id, taskRequestDTO);
+        return ResponseEntity.ok(updatedTask);
+    }
+
+
 }
+

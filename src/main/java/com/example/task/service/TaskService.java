@@ -1,34 +1,25 @@
 package com.example.task.service;
 
-import com.example.task.Task;
+import com.example.task.dto.TaskRequestDTO;
+import com.example.task.dto.TaskResponseDTO;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class TaskService {
-    private final List<Task> tasks = new ArrayList<>();
-    private int nextId = 1;
+public interface TaskService {
 
-    public List<Task> getTasks() {
-        return tasks;
-    }
+    TaskResponseDTO createTask(TaskRequestDTO taskRequestDTO);
 
-    public void addTask(String description) {
-        Task task = new Task(nextId++, description);
-        tasks.add(task);
-    }
+    List<TaskResponseDTO> getAllTasks();
 
-    public void completeTask(int taskId) {
-        Optional<Task> taskOptional = tasks.stream()
-                .filter(task -> task.getId() == taskId)
-                .findFirst();
-        taskOptional.ifPresent(task -> task.setCompleted(true));
-    }
+    void markTaskAsCompleted(Long id);
 
-    public void deleteTask(int taskId) {
-        tasks.removeIf(task -> task.getId() == taskId);
-    }
+    void deleteTask(Long id);
+
+    TaskResponseDTO updateTask(Long id, TaskRequestDTO taskRequestDTO);
+
+    TaskResponseDTO getTaskById(Long id);
+
+
+
 }

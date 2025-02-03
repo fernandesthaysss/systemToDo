@@ -1,0 +1,100 @@
+openapi: 3.0.0
+info:
+  title: Task Service API
+  version: 1.0.0
+  description: API para gerenciamento de tarefas
+
+paths:
+  /tasks:
+    get:
+      summary: Retorna todas as tarefas
+      responses:
+        200:
+          description: Lista das tarefas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskEntity'
+    post:
+      summary: Cria uma nova tarefa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskEntity'
+      responses:
+        200:
+          description: Tarefa criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskEntity'
+
+  /tasks/complete:
+    put:
+      operationId: completeTask
+      tags:
+        - Task
+      summary: Completa uma tarefa
+      description: Marca uma tarefa como completa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCompleteRequest'
+      responses:
+        '200':
+          description: Tarefa concluída com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+
+components:
+  schemas:
+    TaskEntity:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        priority:
+          type: string
+        completed:
+          type: boolean
+        dueDate:
+          type: string
+          format: date
+        category: # Adicione este campo
+          type: string
+      required:
+        - description
+        - priority
+        - dueDate
+        - category  # Se obrigatório
+
+    TaskCompleteRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID da tarefa a ser completada
+      required:
+        - id
+
+    TaskResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indica se a tarefa foi completada com sucesso
+        message:
+          type: string
+          description: Mensagem adicional sobre a operação
+      required:
+        - success

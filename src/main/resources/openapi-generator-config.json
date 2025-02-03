@@ -1,0 +1,9 @@
+{
+  "library": "spring",
+  "modelPackage": "com.example.task.model",
+  "apiPackage": "com.example.task.api",
+  "configOptions": {
+    "java8": true,
+    "useJakarta": true
+  }
+}

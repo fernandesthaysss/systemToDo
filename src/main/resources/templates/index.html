@@ -1,35 +1,391 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-  <title>To-Do List</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Tarefas</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Fonte padrão */
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Cores inspiradas no estilo do Jira */
+        .gradient-custom-2 {
+            background: linear-gradient(to right, #0747A6, #0052CC); /* Tons de azul */
+        }
+
+        .mask-custom {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 0.5em;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            color: #172B4D; /* Azul escuro padrão */
+        }
+
+        .badge-danger {
+            background-color: #DE350B; /* Vermelho Jira */
+        }
+
+        .badge-warning {
+            background-color: #FFAB00; /* Amarelo Jira */
+            color: #000; /* Contraste melhor para amarelo */
+        }
+
+        .badge-success {
+            background-color: #36B37E; /* Verde Jira */
+        }
+
+        /* Alterar os botões */
+        .btn-primary {
+            background-color: #0052CC;
+            border-color: #0052CC;
+        }
+
+        .btn-primary:hover {
+            background-color: #0747A6;
+            border-color: #0747A6;
+        }
+
+        .btn-danger {
+            background-color: #DE350B;
+            border-color: #DE350B;
+        }
+
+        .btn-danger:hover {
+            background-color: #FF5630;
+            border-color: #FF5630;
+        }
+
+        .btn-warning {
+            background-color: #FFAB00;
+            border-color: #FFAB00;
+            color: #000;
+        }
+
+        .btn-warning:hover {
+            background-color: #FFC400;
+            border-color: #FFC400;
+            color: #000;
+        }
+
+        .btn-success {
+            background-color: #36B37E;
+            border-color: #36B37E;
+        }
+
+        .btn-success:hover {
+            background-color: #57D9A3;
+            border-color: #57D9A3;
+        }
+
+        /* Cabeçalho da tabela */
+        thead tr {
+            background-color: #0747A6;
+            color: #fff;
+        }
+
+        tbody tr:hover {
+            background-color: #EAEAEA;
+        }
+
+        h2 {
+            color: #0052CC; /* Azul no título */
+            font-weight: 500;
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-5">
-  <h1 class="text-center">To-Do List</h1>
-  <form action="/tasks/add" method="post" class="mb-3">
-    <div class="input-group">
-      <input type="text" name="description" class="form-control" placeholder="Nova tarefa" required>
-      <button type="submit" class="btn btn-primary">Adicionar</button>
+<section class="vh-100 gradient-custom-2">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-12 col-xl-10">
+                <div class="card mask-custom">
+                    <div class="card-body p-4">
+                        <div class="text-center pt-3 pb-2">
+                            <h2 class="my-4">
+                                <i class="fas fa-tasks"></i> Gerenciamento de Tarefas
+                            </h2>
+                            <form id="task-form">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <input type="text" id="description" class="form-control" placeholder="Descrição" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select id="priority" class="form-control" required>
+                                            <option value="Alta">Alta</option>
+                                            <option value="Média">Média</option>
+                                            <option value="Baixa">Baixa</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="date" id="dueDate" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" id="category" class="form-control" placeholder="Categoria" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" id="save-button" class="btn btn-primary w-100">
+                                            <i class="fas fa-plus"></i> Salvar
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <table class="table table-striped mb-0">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <i class="fas fa-align-left"></i> Descrição
+                                </th>
+                                <th>
+                                    <i class="fas fa-folder-open"></i> Categoria
+                                </th>
+                                <th>
+                                    <i class="fas fa-exclamation-circle"></i> Prioridade
+                                </th>
+                                <th>
+                                    <i class="fas fa-calendar-alt"></i> Vencimento
+                                </th>
+                                <th>
+                                    <i class="fas fa-tasks"></i> Status
+                                </th>
+                                <th>
+                                    <i class="fas fa-cogs"></i> Ações
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="task-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </form>
+</section>
+</body>
+</html>
 
-  <ul class="list-group">
-    <li th:each="task : ${tasks}" class="list-group-item d-flex justify-content-between align-items-center">
-      <span th:text="${task.description}" th:class="${task.completed} ? 'text-decoration-line-through' : ''"></span>
-      <div>
-        <form action="/tasks/complete" method="post" style="display: inline;">
-          <input type="hidden" name="taskId" th:value="${task.id}">
-          <button type="submit" class="btn btn-success btn-sm">Concluir</button>
-        </form>
-        <form action="/tasks/delete" method="post" style="display: inline;">
-          <input type="hidden" name="taskId" th:value="${task.id}">
-          <button type="submit" class="btn btn-danger btn-sm">Remover</button>
-        </form>
-      </div>
-    </li>
-  </ul>
-</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const BASE_URL = "http://localhost:8080/api/v1";
+        let isEditing = false;
+        let editingTaskId = null;
+
+        const taskForm = document.getElementById("task-form");
+        const taskTableBody = document.getElementById("task-table-body");
+        const saveButton = document.getElementById("save-button");
+
+        // Função para buscar as tarefas do backend
+        function fetchTasks() {
+            fetch(`${BASE_URL}/findtasks`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erro ao buscar tarefas.");
+                    }
+                    return response.json();
+                })
+                .then(tasks => renderTasks(tasks))
+                .catch(error => {
+                    console.error("Erro ao carregar tarefas:", error);
+                    alert("Não foi possível carregar as tarefas. Tente novamente mais tarde.");
+                });
+        }
+
+        // Renderizar as tarefas no HTML
+        function renderTasks(tasks) {
+            taskTableBody.innerHTML = "";
+            tasks.forEach(task => {
+                const formattedDate = task.dueDate
+                    ? new Date(task.dueDate).toLocaleDateString("pt-BR")
+                    : "Indefinido";
+
+                taskTableBody.innerHTML += `
+                    <tr>
+                        <td>${task.description || "Indefinido"}</td>
+                        <td>${task.category || "Indefinido"}</td>
+                        <td><span class="badge ${getPriorityClass(task.priority)}">${task.priority || "Indefinido"}</span></td>
+                        <td>${formattedDate}</td>
+                        <td>${task.completed ? '<span class="text-success">Concluído</span>' : '<span class="text-danger">Pendente</span>'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary edit-task-btn" data-id="${task.id}">Editar</button>
+                            <button class="btn btn-sm btn-danger delete-task-btn" data-id="${task.id}">Excluir</button>
+                            <button class="btn btn-sm btn-${task.completed ? 'warning' : 'success'} toggle-complete-btn" data-id="${task.id}">
+                                ${task.completed ? 'Desmarcar' : 'Concluir'}
+                            </button>
+                        </td>
+                    </tr>`;
+            });
+            bindEventListeners();
+        }
+
+        // Capturar a classe da prioridade
+        function getPriorityClass(priority) {
+            return priority === "Alta" ? "badge-danger" : priority === "Média" ? "badge-warning" : "badge-success";
+        }
+
+        // Adicionar evento nos botões (editar, excluir, concluir)
+        function bindEventListeners() {
+            document.querySelectorAll(".edit-task-btn").forEach(button =>
+                button.addEventListener("click", () => editTask(button.getAttribute("data-id")))
+            );
+            document.querySelectorAll(".delete-task-btn").forEach(button =>
+                button.addEventListener("click", () => deleteTask(button.getAttribute("data-id")))
+            );
+            document.querySelectorAll(".toggle-complete-btn").forEach(button =>
+                button.addEventListener("click", () => toggleComplete(button.getAttribute("data-id")))
+            );
+        }
+
+        // Lidar com o envio do formulário
+        taskForm.addEventListener("submit", event => {
+            event.preventDefault();
+
+            const taskData = {
+                description: document.getElementById("description").value,
+                priority: document.getElementById("priority").value,
+                dueDate: document.getElementById("dueDate").value,
+                category: document.getElementById("category").value,
+                completed: false,
+            };
+
+            if (isEditing) {
+                updateTask(taskData);
+            } else {
+                createTask(taskData);
+            }
+        });
+
+        // Criar tarefas
+        function createTask(taskData) {
+            fetch(`${BASE_URL}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(taskData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erro ao criar a tarefa.");
+                    }
+                    return response.json();
+                })
+                .then(() => {
+                    resetForm();
+                    fetchTasks();
+                })
+                .catch(error => {
+                    console.error("Erro ao salvar tarefa:", error);
+                    alert("Erro ao salvar a tarefa.");
+                });
+        }
+
+        // Atualizar tarefas
+        function updateTask(taskData) {
+            fetch(`${BASE_URL}/${editingTaskId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(taskData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erro ao atualizar tarefa.");
+                    }
+                    return response.json();
+                })
+                .then(() => {
+                    isEditing = false;
+                    editingTaskId = null;
+                    resetForm();
+                    fetchTasks();
+                })
+                .catch(error => {
+                    console.error("Erro ao atualizar tarefa:", error);
+                    alert("Erro ao atualizar a tarefa.");
+                });
+        }
+
+        // Preencher o formulário para edição
+        function editTask(id) {
+    fetch(`${BASE_URL}/findtasks/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro ao buscar informações da tarefa.");
+            }
+            return response.json();
+        })
+        .then(task => {
+            // Aqui formatamos os valores antes de preencher os campos
+            const formattedDescription = task.description
+                ? task.description.trim().replace(/([.?!]\s*)(\w)/g, (_, space, letter) => `${space}${letter.toUpperCase()}`)
+                : "";
+
+            const formattedPriority = task.priority
+                ? task.priority.trim().charAt(0).toUpperCase() + task.priority.slice(1).toLowerCase()
+                : "Média";
+
+            document.getElementById("description").value = formattedDescription;
+            document.getElementById("priority").value = formattedPriority;
+            document.getElementById("dueDate").value = task.dueDate ? task.dueDate.split("T")[0] : "";
+            document.getElementById("category").value = task.category || "";
+
+            // Ajuste para indicar edição
+            isEditing = true;
+            editingTaskId = id;
+
+            const saveButton = document.getElementById("save-button");
+            saveButton.textContent = "Salvar Edição";
+            saveButton.classList.add("btn-warning");
+        })
+        .catch(error => {
+            console.error("Erro ao carregar tarefa:", error);
+            alert("Não foi possível carregar os dados da tarefa para edição.");
+        });
+}
+
+        // Excluir tarefas
+        function deleteTask(id) {
+            fetch(`${BASE_URL}/delete/${id}`, {
+                method: "DELETE"
+            })
+                .then(() => fetchTasks())
+                .catch(error => {
+                    console.error("Erro ao excluir tarefa:", error);
+                    alert("Erro ao excluir a tarefa.");
+                });
+        }
+
+        // Concluir ou desmarcar uma tarefa
+        function toggleComplete(id) {
+            fetch(`${BASE_URL}/complete/${id}`, {
+                method: "POST"
+            })
+                .then(() => fetchTasks())
+                .catch(error => {
+                    console.error("Erro ao marcar tarefa:", error);
+                    alert("Erro ao concluir tarefa.");
+                });
+        }
+
+        // Redefinir o formulário
+        function resetForm() {
+            taskForm.reset();
+            saveButton.textContent = "Salvar";
+            saveButton.classList.remove("btn-warning");
+            isEditing = false;
+            editingTaskId = null;
+        }
+
+        fetchTasks();
+    });
+</script>
 </body>
 </html>

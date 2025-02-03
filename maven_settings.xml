@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <localRepository>${user.home}/.m2/repository</localRepository>
+    <interactiveMode>true</interactiveMode>
+    <offline>false</offline>
+
+    <mirrors>
+        <!-- Configuração de um espelho para um repositório central -->
+        <mirror>
+            <id>central-mirror</id>
+            <mirrorOf>central</mirrorOf>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </mirror>
+    </mirrors>
+
+    <servers>
+        <!-- Configuração de autenticação em servidores -->
+        <server>
+            <id>my-private-repo</id>
+            <username>seu-usuario</username>
+            <password>sua-senha</password>
+        </server>
+    </servers>
+
+    <profiles>
+        <profile>
+            <id>default-profile</id>
+            <repositories>
+                <!-- Repositórios específicos -->
+                <repository>
+                    <id>central</id>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>spring-releases</id>
+                    <url>https://repo.spring.io/release</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <activeProfiles>
+        <!-- Define os perfis ativos -->
+        <activeProfile>default-profile</activeProfile>
+    </activeProfiles>
+</settings>
