@@ -1,7 +1,7 @@
-package com.example.task.service;
+package br.sistemaToDo.task.service;
 
-import com.example.task.dto.TaskRequestDTO;
-import com.example.task.dto.TaskResponseDTO;
+import br.sistemaToDo.task.dto.TaskRequestDTO;
+import br.sistemaToDo.task.dto.TaskResponseDTO;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

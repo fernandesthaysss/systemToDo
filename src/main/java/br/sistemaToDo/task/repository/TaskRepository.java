@@ -1,6 +1,6 @@
-package com.example.task.repository;
+package br.sistemaToDo.task.repository;
 
-import com.example.task.entity.TaskEntity;
+import br.sistemaToDo.task.entity.TaskEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

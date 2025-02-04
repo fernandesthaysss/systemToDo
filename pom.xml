@@ -12,7 +12,7 @@
 	</parent>
 
 	<!-- Informações do projeto -->
-	<groupId>com.example</groupId>
+	<groupId>br.sistemaToDo</groupId>
 	<artifactId>taskToDo-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>taskToDo-service</name>
@@ -292,7 +292,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.example.task.TaskServiceApplication</mainClass>
+					<mainClass>br.sistemaToDo.task.TaskServiceApplication</mainClass>
 				</configuration>
 			</plugin>
 

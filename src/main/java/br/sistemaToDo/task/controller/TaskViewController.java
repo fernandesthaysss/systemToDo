@@ -1,6 +1,6 @@
-package com.example.task.controller;
+package br.sistemaToDo.task.controller;
 
-import com.example.task.service.TaskService;
+import br.sistemaToDo.task.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

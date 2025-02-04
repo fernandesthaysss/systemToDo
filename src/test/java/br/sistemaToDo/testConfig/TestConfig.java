@@ -1,4 +1,4 @@
-package com.example.testConfig;
+package br.sistemaToDo.testConfig;
 
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

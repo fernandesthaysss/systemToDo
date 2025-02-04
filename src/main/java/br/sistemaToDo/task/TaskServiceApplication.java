@@ -1,7 +1,7 @@
-package com.example.task;
+package br.sistemaToDo.task;
 
-import com.example.task.entity.TaskEntity;
-import com.example.task.repository.TaskRepository;
+import br.sistemaToDo.task.entity.TaskEntity;
+import br.sistemaToDo.task.repository.TaskRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;

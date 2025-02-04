@@ -1,11 +1,11 @@
-package com.example.task.service;
+package br.sistemaToDo.task.service;
 
-import com.example.task.mapper.TaskMapper;
-import com.example.task.dto.TaskRequestDTO;
-import com.example.task.dto.TaskResponseDTO;
-import com.example.task.entity.TaskEntity;
-import com.example.task.repository.TaskRepository;
-import com.example.taskmanagement.exception.TaskNotFoundException;
+import br.sistemaToDo.task.mapper.TaskMapper;
+import br.sistemaToDo.task.dto.TaskRequestDTO;
+import br.sistemaToDo.task.dto.TaskResponseDTO;
+import br.sistemaToDo.task.entity.TaskEntity;
+import br.sistemaToDo.task.repository.TaskRepository;
+import br.sistemaToDo.taskmanagement.exception.TaskNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.example.taskmanagement.handler;
+package br.sistemaToDo.taskmanagement.handler;
 
-import com.example.taskmanagement.exception.TaskNotFoundException;
+import br.sistemaToDo.taskmanagement.exception.TaskNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -1,8 +1,8 @@
-package com.example.task.mapper;
+package br.sistemaToDo.task.mapper;
 
-import com.example.task.dto.TaskRequestDTO;
-import com.example.task.dto.TaskResponseDTO;
-import com.example.task.entity.TaskEntity;
+import br.sistemaToDo.task.dto.TaskRequestDTO;
+import br.sistemaToDo.task.dto.TaskResponseDTO;
+import br.sistemaToDo.task.entity.TaskEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -1,8 +1,8 @@
-package com.example.task.controller;
+package br.sistemaToDo.task.controller;
 
-import com.example.task.dto.TaskRequestDTO;
-import com.example.task.dto.TaskResponseDTO;
-import com.example.task.service.TaskService;
+import br.sistemaToDo.task.dto.TaskRequestDTO;
+import br.sistemaToDo.task.dto.TaskResponseDTO;
+import br.sistemaToDo.task.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,42 +1,27 @@
-package com.example.task.entity;
+package br.sistemaToDo.task.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-@Entity
-public class TaskEntity {
+public class TaskRequestDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "A descrição da tarefa é obrigatória.")
     private String description;
+
+    @NotNull(message = "Prioridade não pode ser nula.")
     private String priority;
+
     private boolean completed;
+
+    @NotNull(message = "A data de vencimento é obrigatória.")
     private LocalDate dueDate;
+
+    @NotBlank(message = "A categoria da tarefa é obrigatória.")
     private String category;
-
-    public TaskEntity() {}
-
-    public TaskEntity(String description, String priority, LocalDate dueDate) {
-        this.description = description;
-        this.priority = priority;
-        this.completed = false;
-        this.dueDate = dueDate;
-        this.category =  category;
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getDescription() {
         return description;
@@ -52,6 +37,14 @@ public class TaskEntity {
 
     public void setPriority(String priority) {
         this.priority = priority;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public boolean isCompleted() {
