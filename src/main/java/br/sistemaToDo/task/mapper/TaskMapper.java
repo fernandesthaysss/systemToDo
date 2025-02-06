@@ -14,4 +14,5 @@ public interface TaskMapper {
 
     @Mapping(source = "category", target = "category")
     TaskResponseDTO toResponse(TaskEntity taskEntity);
+
 }

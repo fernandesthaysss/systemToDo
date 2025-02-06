@@ -15,7 +15,6 @@ public class TaskServiceApplication {
 
 		TaskRepository taskRepository = context.getBean(TaskRepository.class);
 
-		// Usando o construtor ajustado com description e priority
 		TaskEntity task = new TaskEntity("Test task with due date", "Medium", LocalDate.now().plusDays(7));
 		task = taskRepository.save(task);
 

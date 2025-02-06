@@ -33,8 +33,9 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody TaskRequestDTO taskRequestDTO) {
+        // Cria a tarefa e retorna o DTO da tarefa criada
         TaskResponseDTO createdTask = taskService.createTask(taskRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask); // Garante que a resposta tem 201 CREATED
     }
 
 
@@ -53,6 +54,7 @@ public class TaskController {
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long id,
                                                       @Valid @RequestBody TaskRequestDTO taskRequestDTO) {
+        // Chama o serviço para atualizar a tarefa e retorna o DTO atualizado
         TaskResponseDTO updatedTask = taskService.updateTask(id, taskRequestDTO);
         return ResponseEntity.ok(updatedTask);
     }

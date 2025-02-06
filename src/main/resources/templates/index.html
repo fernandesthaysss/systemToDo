@@ -265,53 +265,85 @@
             }
         });
 
-        // Criar tarefas
         function createTask(taskData) {
-            fetch(`${BASE_URL}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(taskData)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Erro ao criar a tarefa.");
-                    }
-                    return response.json();
-                })
-                .then(() => {
-                    resetForm();
-                    fetchTasks();
-                })
-                .catch(error => {
-                    console.error("Erro ao salvar tarefa:", error);
-                    alert("Erro ao salvar a tarefa.");
-                });
+    // Envia a requisição POST para criar uma nova tarefa
+    fetch(`${BASE_URL}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(taskData)
+    })
+    .then(response => {
+        // Verifica se a resposta do servidor foi bem-sucedida
+        if (!response.ok) {
+            throw new Error("Erro ao criar a tarefa.");
         }
+        return response.json(); // Converte a resposta para JSON se for bem-sucedida
+    })
+    .then(createdTask => {
+        // Atualiza a tabela diretamente com a tarefa recém-criada sem recarregar a página
+        const formattedDate = createdTask.dueDate
+            ? new Date(createdTask.dueDate).toLocaleDateString("pt-BR")
+            : "Indefinido";
 
-        // Atualizar tarefas
+        // Renderiza a nova tarefa diretamente na tabela
+        taskTableBody.innerHTML += `
+            <tr>
+                <td>${createdTask.description || "Indefinido"}</td>
+                <td>${createdTask.category || "Indefinido"}</td>
+                <td>
+                    <span class="badge ${getPriorityClass(createdTask.priority)}">${createdTask.priority || "Indefinido"}</span>
+                </td>
+                <td>${formattedDate}</td>
+                <td>${createdTask.completed
+                    ? '<span class="text-success">Concluído</span>'
+                    : '<span class="text-danger">Pendente</span>'}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary edit-task-btn" data-id="${createdTask.id}">Editar</button>
+                    <button class="btn btn-sm btn-danger delete-task-btn" data-id="${createdTask.id}">Excluir</button>
+                    <button class="btn btn-sm btn-${createdTask.completed ? 'warning' : 'success'} toggle-complete-btn" data-id="${createdTask.id}">
+                        ${createdTask.completed ? 'Desmarcar' : 'Concluir'}
+                    </button>
+                </td>
+            </tr>
+        `;
+
+        // Reassocia os eventos de clique dos botões (editar, excluir, concluir)
+        bindEventListeners();
+
+        // Limpa o formulário e redefine o estado
+        resetForm();
+    })
+    .catch(error => {
+        // Trata erros e exibe uma mensagem ao usuário
+        console.error("Erro ao salvar tarefa:", error);
+        alert("Erro ao salvar a tarefa.");
+    });
+}
+
         function updateTask(taskData) {
-            fetch(`${BASE_URL}/${editingTaskId}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(taskData)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Erro ao atualizar tarefa.");
-                    }
-                    return response.json();
-                })
-                .then(() => {
-                    isEditing = false;
-                    editingTaskId = null;
-                    resetForm();
-                    fetchTasks();
-                })
-                .catch(error => {
-                    console.error("Erro ao atualizar tarefa:", error);
-                    alert("Erro ao atualizar a tarefa.");
-                });
+    // Envia a requisição PUT para atualizar uma tarefa existente
+    fetch(`${BASE_URL}/${editingTaskId}`, { // Certifique-se de que 'editingTaskId' foi configurado corretamente
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(taskData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao atualizar tarefa.");
         }
+        return response.json();
+    })
+    .then(() => {
+        isEditing = false;
+        editingTaskId = null;
+        resetForm();
+        fetchTasks(); // Atualiza a lista de tarefas após a edição
+    })
+    .catch(error => {
+        console.error("Erro ao atualizar tarefa:", error);
+        alert("Erro ao atualizar a tarefa.");
+    });
+}
 
         // Preencher o formulário para edição
         function editTask(id) {
@@ -374,14 +406,13 @@
                     alert("Erro ao concluir tarefa.");
                 });
         }
-        // Redefinir o formulário
         function resetForm() {
-            taskForm.reset();
-            saveButton.textContent = "Salvar";
-            saveButton.classList.remove("btn-warning");
-            isEditing = false;
-            editingTaskId = null;
-        }
+    taskForm.reset(); // Limpa todos os campos do formulário
+    saveButton.textContent = "Salvar"; // Garante que o texto do botão retorne ao normal
+    saveButton.classList.remove("btn-warning"); // Remove o estilo de edição
+    isEditing = false;
+    editingTaskId = null; // Redefine o ID da tarefa
+}
 
         fetchTasks();
     });

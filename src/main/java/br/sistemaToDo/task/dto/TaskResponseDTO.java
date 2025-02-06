@@ -9,7 +9,7 @@ public class TaskResponseDTO {
     private String priority;
     private boolean completed;
     private LocalDate dueDate;
-    private String category;// Novo campo adicionado
+    private String category;
 
     public TaskResponseDTO(Long id, String description, String priority, boolean completed, LocalDate dueDate , String category) {
         this.id = id;
