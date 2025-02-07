@@ -27,6 +27,12 @@ public class TaskController {
 
     @GetMapping("/findtasks/{id}")
     public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long id) {
+        // Validação de ID nulo
+        if (id == null || id <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(null); // Retorna erro 400 caso o ID seja inválido
+        }
+
         TaskResponseDTO task = taskService.getTaskById(id);
         return ResponseEntity.ok(task);
     }
@@ -37,7 +43,6 @@ public class TaskController {
         TaskResponseDTO createdTask = taskService.createTask(taskRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTask); // Garante que a resposta tem 201 CREATED
     }
-
 
     @PostMapping("/complete/{id}")
     public ResponseEntity<Void> completeTask(@PathVariable Long id) {
